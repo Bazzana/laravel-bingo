@@ -18,9 +18,16 @@ function Bingo() {
       setinItialBoardState(url.searchParams.get("boardState").split(","))
       setinItialMarkedNumbers(url.searchParams.get("markedNumbers").split(","))
     }
+    else if (localStorage.getItem("boardState") && localStorage.getItem("markedNumbers") && localStorage.getItem("name")) {
+      setGameInProgress(true);
+      setinItialBoardState(localStorage.getItem("boardState").split(","))
+      setinItialMarkedNumbers(localStorage.getItem("markedNumbers").split(","))
+      setName(localStorage.getItem("name"))
+    }
   }, []);
 
   function startGameClick() {
+    localStorage.setItem("name", name)
     setGameInProgress(true)
   }
 

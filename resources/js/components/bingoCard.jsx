@@ -20,12 +20,14 @@ function BingoCard({initialBoardState, initialMarkedNumbers}) {
     const url = new URL(window.location.href);
     url.searchParams.set("boardState", boardState.toString());
     window.history.pushState(null, '', url.toString());
+    localStorage.setItem("boardState", boardState.toString())
   }, [boardState]);
 
   useEffect(() => {
     const url = new URL(window.location.href);
     url.searchParams.set("markedNumbers", markedNumbers.toString());
     window.history.pushState(null, '', url.toString());
+    localStorage.setItem("markedNumbers", markedNumbers.toString())
   }, [markedNumbers]);
 
   // Conditionally warn the user that progress will be lost when clicking generate a card
