@@ -1,11 +1,20 @@
 import { useState, useEffect } from 'react';
 import {  ButtonGroup, Button, SimpleGrid } from "@chakra-ui/react";
 
-function BingoCard({onBoardStateUpdate, onMarkedNumbersUpdate}) {
+function BingoCard({initialBoardState, initialMarkedNumbers}) {
   // Hardcoded bad
   const [boardState, setBoardState] = useState(['','','','','','','','','','','','','Free','','','','','','','','','','','','']);
   const [markedNumbers, setMarkedNumbers] = useState([]);
   const [gameInProgress, setgameInProgress] = useState(false);
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if(initialBoardState.length > 0 && initialMarkedNumbers.length > 0){
+      setBoardState(initialBoardState)
+      setMarkedNumbers(initialMarkedNumbers)
+      setgameInProgress(true)
+    }
+  }, []);
 
   useEffect(() => {
     const url = new URL(window.location.href);

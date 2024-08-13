@@ -1,13 +1,31 @@
-import { useState } from 'react';
-import { Container, VStack, Input, InputGroup, InputRightElement, Center, Button } from "@chakra-ui/react";
+import { useState, useEffect } from 'react';
+import { Box, Container, Text, VStack, Input, InputGroup, InputRightElement, Center, Button } from "@chakra-ui/react";
 import BingoCard from './bingoCard';
+import ShareButton from './ShareButton';
 
 function Bingo() {
   const [name, setName] = useState('');
   const [gameInProgress, setGameInProgress] = useState(false);
+  const [shareURL, setShareURL] = useState('');
+  const [initialBoardState, setinItialBoardState] = useState([]);
+  const [initialMarkedNumbers, setinItialMarkedNumbers] = useState([]);
+
+  // componentDidMount alternative for functional component
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if(url.searchParams.get("boardState") && url.searchParams.get("markedNumbers")){
+      setGameInProgress(true);
+      setinItialBoardState(url.searchParams.get("boardState").split(","))
+      setinItialMarkedNumbers(url.searchParams.get("markedNumbers").split(","))
+    }
+  }, []);
 
   function startGameClick() {
     setGameInProgress(true)
+  }
+
+  const handleShareURL = (URL) => {
+    setShareURL(URL)
   }
 
   return (
@@ -29,9 +47,11 @@ function Bingo() {
                   Start a game
                 </Button>
               </InputRightElement> : ''}
-
             </InputGroup>
-            {gameInProgress ? <BingoCard /> : ''}
+            {gameInProgress ? <BingoCard initialBoardState={initialBoardState} initialMarkedNumbers={initialMarkedNumbers} /> : ''}
+            {gameInProgress ? <ShareButton onShareURL={handleShareURL} />: ''}
+            <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden'><Text fontSize='xs'>{shareURL}</Text></Box>
+
           </VStack>
         </Center>
       </Container>
