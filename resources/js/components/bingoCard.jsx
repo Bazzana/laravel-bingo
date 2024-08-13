@@ -1,11 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {  ButtonGroup, Button, SimpleGrid } from "@chakra-ui/react";
 
-function BingoCard({existingBoardState, existingMarkedNumbers}) {
+function BingoCard({onBoardStateUpdate, onMarkedNumbersUpdate}) {
   // Hardcoded bad
   const [boardState, setBoardState] = useState(['','','','','','','','','','','','','Free','','','','','','','','','','','','']);
   const [markedNumbers, setMarkedNumbers] = useState([]);
   const [gameInProgress, setgameInProgress] = useState(false);
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("boardState", boardState.toString());
+    window.history.pushState(null, '', url.toString());
+  }, [boardState]);
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("markedNumbers", markedNumbers.toString());
+    window.history.pushState(null, '', url.toString());
+  }, [markedNumbers]);
 
   // Conditionally warn the user that progress will be lost when clicking generate a card
   function maybeGenerateNewCard() {
