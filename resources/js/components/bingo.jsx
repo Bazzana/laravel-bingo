@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Container, Input, InputGroup, InputRightElement, SimpleGrid, Center, Button } from "@chakra-ui/react";
+import { Container, VStack, Input, InputGroup, InputRightElement, Center, Button } from "@chakra-ui/react";
+import BingoCard from './bingoCard';
 
 function Bingo() {
   const [name, setName] = useState('');
@@ -13,19 +14,25 @@ function Bingo() {
     <div className="Bingo">
       <Container>
         <Center h="100vh">
-          <InputGroup size='md'>
-            <Input
-              value={name}
-              onChange={e => setName(e.target.value)}
-              placeholder='Enter your name'
-              isDisabled={gameInProgress}
-            />
-            <InputRightElement width='auto'>
-              <Button h='80%' size='sm' mr=".3rem" onClick={startGameClick} isDisabled={ name == '' ? true : false}>
-                Start a game
-              </Button>
-            </InputRightElement>
-          </InputGroup>
+          <VStack>
+            <InputGroup size='lg'>
+              <Input
+                value={name}
+                onChange={e => setName(e.target.value)}
+                placeholder='Enter your name'
+                isDisabled={gameInProgress}
+                w="auto"
+              />
+              {!gameInProgress ?               
+                <InputRightElement width='auto'>
+                <Button h='80%' size='sm' mr=".3rem" onClick={startGameClick} isDisabled={ name == '' ? true : false}>
+                  Start a game
+                </Button>
+              </InputRightElement> : ''}
+
+            </InputGroup>
+            {gameInProgress ? <BingoCard /> : ''}
+          </VStack>
         </Center>
       </Container>
     </div>
