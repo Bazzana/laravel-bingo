@@ -20,3 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/getNumber', [BingoController::class, 'generateNumber']);
+
+Route::post('/markNumber', [BingoController::class, 'validateNumber']);

@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import {  ButtonGroup, Button, SimpleGrid } from "@chakra-ui/react";
 
-function BingoCard({initialBoardState, initialMarkedNumbers}) {
+function BingoCard({initialBoardState, initialMarkedNumbers, currentNumber}) {
   // Hardcoded bad
   const [boardState, setBoardState] = useState(['','','','','','','','','','','','','Free','','','','','','','','','','','','']);
   const [markedNumbers, setMarkedNumbers] = useState([]);
   const [gameInProgress, setgameInProgress] = useState(false);
+
+  const BASE_SITE_URL = new URL(window.location.href)
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -55,11 +57,29 @@ function BingoCard({initialBoardState, initialMarkedNumbers}) {
 
   // Mark a number off our game board
   function markNumber(index,number) {
-    setMarkedNumbers(prev => {
-      const newMarkedNumbers = [...prev];
-      newMarkedNumbers[index] = number;
-      return newMarkedNumbers;
-    });
+
+      // Pass current number to parent for validation
+      const apiURL = `${BASE_SITE_URL.origin}/api/markNumber`;
+      fetch(apiURL, {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ marked: number, current: currentNumber }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if(data.validation_error)  {
+          return 
+        }
+        setMarkedNumbers(prev => {
+          const newMarkedNumbers = [...prev];
+          newMarkedNumbers[index] = number;
+          return newMarkedNumbers;
+        })
+      })
+      .catch(error => console.error(error, 'something went wrong'));
   }
 
   return (

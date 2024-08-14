@@ -31,4 +31,26 @@ class BingoController extends Controller
         // If the resulting array is empty, return 0 otherwise return the 1st element in the array
         return empty($bingo_numbers) ? response()->json(0) : response()->json($bingo_numbers[0]);
     }
+
+    /**
+     * Validate 2 provided numbers
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function validateNumber(Request $request) {
+        $marked = $request->input('marked');
+        $current = $request->input('current');
+
+        if ($marked == $current || $marked == 'Free') {
+            return response()->json([
+                'success' => 'Marked number has been validated'
+            ]); 
+        }
+        else {
+            return response()->json([
+                'validation_error' => 'Marked number is not valid'
+            ]);   
+        }
+    }
 }
