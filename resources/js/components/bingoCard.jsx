@@ -68,6 +68,7 @@ function BingoCard({initialBoardState, initialMarkedNumbers}) {
         <SimpleGrid columns={5} gap="0">
         {boardState.map((number, index) => {
           return <Button 
+          key={index}
           variant={markedNumbers[index] ? "solid" : "outline"}
           size="lg" 
           borderRadius='0' 
