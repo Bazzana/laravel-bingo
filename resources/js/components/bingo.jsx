@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Box, Container, Text, VStack, Input, InputGroup, InputRightElement, Center, Button } from "@chakra-ui/react";
+import { Box, Container, Text, VStack, Input, InputGroup, InputRightElement, Center, Button, Stack } from "@chakra-ui/react";
 import BingoCard from './bingoCard';
-import ShareButton from './ShareButton';
+import ShareButton from './shareButton';
 
 function Bingo() {
   const [name, setName] = useState('');
@@ -9,14 +9,17 @@ function Bingo() {
   const [shareURL, setShareURL] = useState('');
   const [initialBoardState, setinItialBoardState] = useState([]);
   const [initialMarkedNumbers, setinItialMarkedNumbers] = useState([]);
+  const [previousNumbers, setPreviousNumbers] = useState([]);
+  const [currentNumber, setCurrentNumber] = useState(0);
 
   // componentDidMount alternative for functional component
   useEffect(() => {
     const url = new URL(window.location.href);
-    if(url.searchParams.get("boardState") && url.searchParams.get("markedNumbers")){
+    if(url.searchParams.get("boardState") && url.searchParams.get("markedNumbers") && url.searchParams.get("name")){
       setGameInProgress(true);
       setinItialBoardState(url.searchParams.get("boardState").split(","))
       setinItialMarkedNumbers(url.searchParams.get("markedNumbers").split(","))
+      setName(url.searchParams.get("name"))
     }
     else if (localStorage.getItem("boardState") && localStorage.getItem("markedNumbers") && localStorage.getItem("name")) {
       setGameInProgress(true);
@@ -26,8 +29,15 @@ function Bingo() {
     }
   }, []);
 
+  useEffect(() => {
+    setPreviousNumbers(previous => [...previous, currentNumber])
+  }, [currentNumber]);
+
   function startGameClick() {
     localStorage.setItem("name", name)
+    const url = new URL(window.location.href);
+    url.searchParams.set("name", name.toString());
+    window.history.pushState(null, '', url.toString());
     setGameInProgress(true)
   }
 
@@ -35,11 +45,30 @@ function Bingo() {
     setShareURL(URL)
   }
 
+  const getNewNumber = () => {
+    const baseSite = new URL(window.location.href);
+    const numbersQuery = previousNumbers.join(",");
+    const apirURL = `${baseSite.origin}/api/getNumber?numbers=${numbersQuery}`;
+
+    fetch(apirURL)
+    .then(response => response.json())
+    .then(data => {
+      if(data !== 0)  {
+        setCurrentNumber(data)
+      }
+      else {
+        console.error(error, 'Bingo numbers exhausted')
+      }
+    })
+    .catch(error => console.error(error, 'something went wrong'));
+  }
+
   return (
     <div className="Bingo">
       <Container>
         <Center h="100vh">
           <VStack>
+          {gameInProgress && currentNumber !== 0 ? <Text>The next number is: {currentNumber}</Text> : '' }
             <InputGroup size='lg'>
               <Input
                 value={name}
@@ -56,9 +85,12 @@ function Bingo() {
               </InputRightElement> : ''}
             </InputGroup>
             {gameInProgress ? <BingoCard initialBoardState={initialBoardState} initialMarkedNumbers={initialMarkedNumbers} /> : ''}
-            {gameInProgress ? <ShareButton onShareURL={handleShareURL} />: ''}
+            <Stack direction='row' spacing={4} mt={10}>
+              {gameInProgress ? <Button onClick={getNewNumber}>Get a number</Button>: ''}
+              {gameInProgress ? <ShareButton onShareURL={handleShareURL} />: ''}
+            </Stack>
             <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden'><Text fontSize='xs'>{shareURL}</Text></Box>
-
+            {currentNumber}
           </VStack>
         </Center>
       </Container>
