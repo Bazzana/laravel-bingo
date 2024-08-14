@@ -19,6 +19,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// Get a bingo number
 Route::get('/getNumber', [BingoController::class, 'generateNumber']);
 
+// Validate our marked number 
 Route::post('/markNumber', [BingoController::class, 'validateNumber']);
+
+// Get all bingo scores
+Route::get('/scores', [ScoreController::class, 'index']);
+
+// Add a new bingo score
+Route::post('/scores', [ScoreController::class, 'store']);
