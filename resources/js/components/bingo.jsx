@@ -12,6 +12,8 @@ function Bingo() {
   const [previousNumbers, setPreviousNumbers] = useState([]);
   const [currentNumber, setCurrentNumber] = useState(0);
 
+  const BASE_SITE_URL = new URL(window.location.href)
+
   // componentDidMount alternative for functional component
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -46,11 +48,13 @@ function Bingo() {
   }
 
   const getNewNumber = () => {
-    const baseSite = new URL(window.location.href);
-    const numbersQuery = previousNumbers.join(",");
-    const apirURL = `${baseSite.origin}/api/getNumber?numbers=${numbersQuery}`;
+    let numbersQuery = 0;
+    if(previousNumbers && previousNumbers.length > 0) {
+      numbersQuery = previousNumbers.join(",");
+    }
+    const apiURL = `${BASE_SITE_URL.origin}/api/getNumber?numbers=${numbersQuery}`;
 
-    fetch(apirURL)
+    fetch(apiURL)
     .then(response => response.json())
     .then(data => {
       if(data !== 0)  {
@@ -84,7 +88,7 @@ function Bingo() {
                 </Button>
               </InputRightElement> : ''}
             </InputGroup>
-            {gameInProgress ? <BingoCard initialBoardState={initialBoardState} initialMarkedNumbers={initialMarkedNumbers} /> : ''}
+            {gameInProgress ? <BingoCard initialBoardState={initialBoardState} initialMarkedNumbers={initialMarkedNumbers} currentNumber={currentNumber}/> : ''}
             <Stack direction='row' spacing={4} mt={10}>
               {gameInProgress ? <Button onClick={getNewNumber}>Get a number</Button>: ''}
               {gameInProgress ? <ShareButton onShareURL={handleShareURL} />: ''}
