@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {  ButtonGroup, Button, SimpleGrid } from "@chakra-ui/react";
 
-function BingoCard({initialBoardState, initialMarkedNumbers, currentNumber}) {
+function BingoCard({initialBoardState, initialMarkedNumbers, currentNumber, onReset}) {
   // Hardcoded bad
   const [boardState, setBoardState] = useState(['','','','','','','','','','','','','Free','','','','','','','','','','','','']);
   const [markedNumbers, setMarkedNumbers] = useState([]);
@@ -45,6 +45,7 @@ function BingoCard({initialBoardState, initialMarkedNumbers, currentNumber}) {
 
   // Generate a card by by instantiating an array, map over & filling 0-100 at the loop index 
   function generateNewCard() {
+    onReset();
     setgameInProgress(true)
     let numbers = Array(100).fill().map((num, index) => index + 1);
     // Randomise our array contents
