@@ -10,7 +10,7 @@ class ScoreController extends Controller
 {
     public function index()
     {
-        $scores = Score::all();
+        $scores = Score::orderBy('score', 'desc')->get();
  
         return response()->json($scores);
     }

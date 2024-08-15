@@ -114,8 +114,7 @@ function BingoCard({initialBoardState, initialMarkedNumbers, currentNumber, onRe
         {boardState.map((number, index) => {
           return <Button 
           key={index}
-          variant={markedNumbers[index] || number == currentNumber ? "solid" : "outline"}
-          colorScheme = {number == currentNumber? 'green' : ''}
+          variant={markedNumbers[index] ? "solid" : "outline"}
           size="lg" 
           borderRadius='0' 
           onClick={() => markNumber(index,number)} 
