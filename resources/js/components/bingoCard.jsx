@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {  ButtonGroup, Button, SimpleGrid } from "@chakra-ui/react";
 
-function BingoCard({initialBoardState, initialMarkedNumbers, currentNumber, onReset}) {
+function BingoCard({initialBoardState, initialMarkedNumbers, currentNumber, onReset, name, score}) {
   // Hardcoded bad
   const [boardState, setBoardState] = useState(['','','','','','','','','','','','','Free','','','','','','','','','','','','']);
   const [markedNumbers, setMarkedNumbers] = useState([]);
@@ -26,6 +26,13 @@ function BingoCard({initialBoardState, initialMarkedNumbers, currentNumber, onRe
   }, [boardState]);
 
   useEffect(() => {
+    // Check the contents of markedNumbers and post score if complete
+    const completeness = markedNumbers.filter( num => num !== undefined && num !== '');
+
+    if (completeness.length == 25) {
+      postScore();
+    }
+
     const url = new URL(window.location.href);
     url.searchParams.set("markedNumbers", markedNumbers.toString());
     window.history.pushState(null, '', url.toString());
@@ -83,6 +90,23 @@ function BingoCard({initialBoardState, initialMarkedNumbers, currentNumber, onRe
       .catch(error => console.error(error, 'something went wrong'));
   }
 
+  function postScore() {
+    const apiURL = `${BASE_SITE_URL.origin}/api/scores`;
+    fetch(apiURL, {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name, score }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+    })
+    .catch(error => console.error(error, 'something went wrong'));
+  }
+
   return (
     <div className="BingoCard">
       <ButtonGroup>
@@ -90,7 +114,8 @@ function BingoCard({initialBoardState, initialMarkedNumbers, currentNumber, onRe
         {boardState.map((number, index) => {
           return <Button 
           key={index}
-          variant={markedNumbers[index] ? "solid" : "outline"}
+          variant={markedNumbers[index] || number == currentNumber ? "solid" : "outline"}
+          colorScheme = {number == currentNumber? 'green' : ''}
           size="lg" 
           borderRadius='0' 
           onClick={() => markNumber(index,number)} 

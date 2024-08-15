@@ -36,7 +36,7 @@ function Bingo() {
     setPreviousNumbers(previous => [...previous, currentNumber])
   }, [currentNumber]);
 
-  const startGameClick = () => {
+  function startGameClick(){
     localStorage.setItem("name", name)
     const url = new URL(window.location.href);
     url.searchParams.set("name", name.toString());
@@ -44,19 +44,19 @@ function Bingo() {
     setGameInProgress(true)
   }
 
-  const handleShareURL = (URL) => {
+  function handleShareURL(URL) {
     setShareURL(URL)
   }
 
   // Ideally shouldn't mutate the state directly here
-  const resetTotalNumbersGenerated = () => {
+  function resetTotalNumbersGenerated () {
     setTotalNumbersGenerated(0);
     setPreviousNumbers([]);
     setCurrentNumber(0);
   }
 
 
-  const getNewNumber = () => {
+  function getNewNumber() {
     setTotalNumbersGenerated(prevTotal => prevTotal + 1);
     let numbersQuery = 0;
     if(previousNumbers && previousNumbers.length > 0) {
@@ -98,7 +98,7 @@ function Bingo() {
                 </Button>
               </InputRightElement> : ''}
             </InputGroup>
-            {gameInProgress ? <BingoCard initialBoardState={initialBoardState} initialMarkedNumbers={initialMarkedNumbers} currentNumber={currentNumber} onReset={resetTotalNumbersGenerated}/> : ''}
+            {gameInProgress ? <BingoCard score={totalNumbersGenerated} name={name} initialBoardState={initialBoardState} initialMarkedNumbers={initialMarkedNumbers} currentNumber={currentNumber} onReset={resetTotalNumbersGenerated}/> : ''}
             <Stack direction='row' spacing={4} mt={10}>
               {gameInProgress ? <Button onClick={getNewNumber}>Get a number</Button>: ''}
               {gameInProgress ? <ShareButton onShareURL={handleShareURL} />: ''}
