@@ -14,6 +14,8 @@ After cloning the repo, run the following commands
 `DB_CONNECTION=sqlite` 
   - Point our laravel config to our previously created sqlite file in step 1
 
+Comment out the rest of the DB_* variables, all that should be required here is the DB_CONNECTION
+
 ## Run database migrations
 `php artisan migrate`
   - Run migrations, this will create the required Scores table
