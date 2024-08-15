@@ -1,5 +1,5 @@
 ## First steps
-After cloning the repo, run the following commands
+After cloning the repo, run the following commands from inside the root of the project
 
 `touch ./database/database.sqlite` 
   - Create a sqlite file
