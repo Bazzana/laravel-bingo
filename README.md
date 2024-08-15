@@ -24,4 +24,4 @@ After cloning the repo, run the following commands
 
 ## Serve the site and play Bingo
  `php artisan serve`
-  - This step may be different depending on how you've configured your local development environment (for instance, if you're using vagrant with Laravel Homestead).
+  - This step may differ depending on how you've configured your local development environment (for instance, if you're using vagrant with Laravel Homestead).
