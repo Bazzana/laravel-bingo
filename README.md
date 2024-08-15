@@ -3,8 +3,10 @@ After cloning the repo, run the following commands
 
 `touch ./database/database.sqlite` 
   - Create a sqlite file
+
 `npm i`
   - install required packages from NPM
+
 `composer install--ignore-platform-reqs`
   - install required packages from Composer, ignore platform reqs may be required due to php mismatch errors on some dependencies
 
