@@ -14,11 +14,11 @@ After cloning the repo, run the following commands
 `DB_CONNECTION=sqlite` 
   - Point our laravel config to our previously created sqlite file in step 1
 
-## Run database migrations migrations
+## Run database migrations
 `php artisan migrate`
   - Run migrations, this will create the required Scores table
 
-## Run database migrations migrations
+## Build production assets
 `npm run production`
   - This will run the build script using Mix, compiling all assets to a production ready state.
 
