@@ -102,6 +102,7 @@ function Bingo() {
             <Stack direction='row' spacing={4} mt={10}>
               {gameInProgress ? <Button onClick={getNewNumber}>Get a number</Button>: ''}
               {gameInProgress ? <ShareButton onShareURL={handleShareURL} />: ''}
+              <a href="/leaderboard"><Button>View Leaderboard</Button></a>
             </Stack>
             <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden'><Text fontSize='xs'>{shareURL}</Text></Box>
             {currentNumber}
